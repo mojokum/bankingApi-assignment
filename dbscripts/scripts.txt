@@ -1,0 +1,120 @@
+CREATE TABLE public.accounttype
+(
+    id serial NOT NULL,
+    type character varying(50) NOT NULL,
+    code character varying(10) NOT NULL,
+    isactive boolean NOT NULL,
+    createdby character varying(10) NOT NULL,
+    createdon time with time zone NOT NULL,
+    updatedby character varying(10),
+    updatedon time with time zone,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public.accounttype
+    OWNER to postgres;
+	
+
+
+CREATE TABLE public.transactiontype
+(
+    id serial NOT NULL,
+    type character varying(50) NOT NULL,
+    code character varying(10) NOT NULL,
+    isactive boolean NOT NULL,
+    createdby character varying(10) NOT NULL,
+    createdon time with time zone NOT NULL,
+    updatedby character varying(10),
+    updatedon time with time zone,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public.transactiontype
+    OWNER to postgres;
+	
+
+
+CREATE TABLE public.customer
+(
+    id serial NOT NULL,
+    name character varying(150) NOT NULL,
+    email character varying(100) NOT NULL,
+    contact character varying(15) NOT NULL,
+    createdby character varying(10) NOT NULL,
+    createdon time with time zone NOT NULL,
+    updatedby character varying(10),
+    updatedon time with time zone,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public.customer
+    OWNER to postgres;
+	
+
+CREATE TABLE public.account
+(
+    id serial NOT NULL,
+    customerid integer NOT NULL,
+    accountype integer NOT NULL,
+    balance numeric NOT NULL,
+    createdby character varying(10) NOT NULL,
+    createdon time with time zone NOT NULL,
+    updatedby character varying(10),
+    updatedon time with time zone,
+    PRIMARY KEY (id),
+    CONSTRAINT account_customerid_customer_id FOREIGN KEY (customerid)
+        REFERENCES public.customer (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT account_accountype_accounttype_id FOREIGN KEY (accountype)
+        REFERENCES public.accounttype (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+
+ALTER TABLE public.account
+    OWNER to postgres;
+
+
+CREATE TABLE public.transactiondetail
+(
+    id integer NOT NULL DEFAULT nextval('transactiondetail_id_seq'::regclass),
+    accountid integer NOT NULL,
+    beneficiary integer NOT NULL,
+    amount numeric NOT NULL,
+    transactiontype integer NOT NULL,
+    createdby character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    createdon time with time zone NOT NULL,
+    updatedby character varying(10) COLLATE pg_catalog."default",
+    updatedon time with time zone,
+    CONSTRAINT transactiondetail_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.transactiondetail
+    OWNER to postgres;
+	
+ALTER TABLE public.transactiondetail
+    ADD CONSTRAINT transactiondetail_transactiontype_transactiontype_id FOREIGN KEY (transactiontype)
+    REFERENCES public.transactiontype (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+	
+
+insert into transactiontype (type,code,isactive,createdby,createdon,updatedby,updatedon)
+values ('Credit', 'CR', true, 'master', now(), null,null)
+
+insert into transactiontype (type,code,isactive,createdby,createdon,updatedby,updatedon)
+values ('Debit', 'DR', true, 'master', now(), null,null)
+
+
+insert into accounttype (type,code,isactive,createdby,createdon,updatedby,updatedon)
+values ('Saving', 'SB', true, 'master', now(), null,null);
+
+insert into accounttype (type,code,isactive,createdby,createdon,updatedby,updatedon)
+values ('Current', 'CA', true, 'master', now(), null,null);

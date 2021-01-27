@@ -1,0 +1,8 @@
+export const SEQUELIZE = 'SEQUELIZE';
+export const DEVELOPMENT = 'development';
+export const TEST = 'test';
+export const PRODUCTION = 'production';
+export const ACCOUNTTYPE_REPOSITORY = 'ACCOUNTTYPE_REPOSITORY';
+export const CUSTOMER_REPOSITORY = 'CUSTOMER_REPOSITORY';
+export const ACCOUNT_REPOSITORY = 'ACCOUNT_REPOSITORY';
+export const TRANSACTIONDETAIL_REPOSITORY = 'TRANSACTIONDETAIL_REPOSITORY';
